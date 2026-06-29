@@ -2,9 +2,9 @@
 
 ## 1. Team / student
 
-- Name: Student
-- Repo/commit: phase2-track3-day8-langgraph-agent
-- Date: 2026-06-29 19:58
+- Name: Linh
+- Repo/commit: phase2-track3-day8-langgraph-agent / 8bf5147
+- Date: 2026-06-29 20:11
 
 ## 2. Architecture
 

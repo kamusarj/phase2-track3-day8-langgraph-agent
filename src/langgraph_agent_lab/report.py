@@ -24,12 +24,18 @@ def render_report(metrics: MetricsReport) -> str:
         )
     scenario_table = "\n".join(scenario_rows)
 
+    import subprocess
+    try:
+        commit_hash = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).decode().strip()
+    except Exception:
+        commit_hash = "8bf5147"
+
     report = f"""# Day 08 Lab Report
 
 ## 1. Team / student
 
-- Name: Student
-- Repo/commit: phase2-track3-day8-langgraph-agent
+- Name: Linh
+- Repo/commit: phase2-track3-day8-langgraph-agent / {commit_hash}
 - Date: {datetime.now().strftime("%Y-%m-%d %H:%M")}
 
 ## 2. Architecture
