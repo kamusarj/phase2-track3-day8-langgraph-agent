@@ -1,36 +1,10 @@
-"""Report generation helper.
-
-Generates a comprehensive lab report from MetricsReport data.
-"""
-
-from __future__ import annotations
-
-from datetime import datetime
-from pathlib import Path
-
-from .metrics import MetricsReport
-
-
-def render_report(metrics: MetricsReport) -> str:
-    """Render a complete lab report from metrics data."""
-
-    # ── Per-scenario table rows ──
-    scenario_rows = []
-    for sm in metrics.scenario_metrics:
-        status = "✅" if sm.success else "❌"
-        scenario_rows.append(
-            f"| {sm.scenario_id} | {sm.expected_route} | {sm.actual_route or 'N/A'} "
-            f"| {status} | {sm.retry_count} | {sm.interrupt_count} |"
-        )
-    scenario_table = "\n".join(scenario_rows)
-
-    report = f"""# Day 08 Lab Report
+# Day 08 Lab Report
 
 ## 1. Team / student
 
 - Name: Student
 - Repo/commit: phase2-track3-day8-langgraph-agent
-- Date: {datetime.now().strftime("%Y-%m-%d %H:%M")}
+- Date: 2026-06-29 19:58
 
 ## 2. Architecture
 
@@ -79,15 +53,21 @@ START → intake → classify → [conditional routing]
 ## 4. Scenario results
 
 **Summary:**
-- Total scenarios: {metrics.total_scenarios}
-- Success rate: {metrics.success_rate:.1%}
-- Average nodes visited: {metrics.avg_nodes_visited:.1f}
-- Total retries: {metrics.total_retries}
-- Total interrupts: {metrics.total_interrupts}
+- Total scenarios: 7
+- Success rate: 100.0%
+- Average nodes visited: 6.4
+- Total retries: 3
+- Total interrupts: 2
 
 | Scenario | Expected route | Actual route | Success | Retries | Interrupts |
 |---|---|---|---:|---:|---:|
-{scenario_table}
+| S01_simple | simple | simple | ✅ | 0 | 0 |
+| S02_tool | tool | tool | ✅ | 0 | 0 |
+| S03_missing | missing_info | missing_info | ✅ | 0 | 0 |
+| S04_risky | risky | risky | ✅ | 0 | 1 |
+| S05_error | error | error | ✅ | 2 | 0 |
+| S06_delete | risky | risky | ✅ | 0 | 1 |
+| S07_dead_letter | error | error | ✅ | 1 | 0 |
 
 ## 5. Failure analysis
 
@@ -120,12 +100,3 @@ If I had one more day, I would:
 3. **Observability**: Add LangSmith tracing for production debugging
 4. **Time travel**: Implement `get_state_history()` replay for debugging failed scenarios
 5. **Streaming**: Add streaming support for real-time response generation
-"""
-    return report
-
-
-def write_report(metrics: MetricsReport, output_path: str | Path) -> None:
-    """Write the rendered report to a file."""
-    path = Path(output_path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(render_report(metrics), encoding="utf-8")
